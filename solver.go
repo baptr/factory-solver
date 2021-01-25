@@ -21,6 +21,7 @@ type Solver struct {
 
 func newSolver(cfg *configpb.Config) (*Solver, error) {
 	byName := make(map[string]*configpb.Recipe)
+	byResult := make(map[string][]*configpb.Recipe)
 	var unnamed []*configpb.Recipe
 	for _, r := range cfg.Recipe {
 		if r.Name == "" {
@@ -34,6 +35,9 @@ func newSolver(cfg *configpb.Config) (*Solver, error) {
 			}
 			byName[r.Name] = r
 		}
+		for _, out := range r.Result {
+			byResult[out.Item] = append(byResult[out.Item], r)
+		}
 	}
 	for _, r := range unnamed {
 		name := r.Result[0].Item
@@ -45,12 +49,6 @@ func newSolver(cfg *configpb.Config) (*Solver, error) {
 	}
 	log.Printf("Loaded %d recipes", len(byName))
 
-	byResult := make(map[string][]*configpb.Recipe)
-	for _, r := range byName {
-		for _, out := range r.Result {
-			byResult[out.Item] = append(byResult[out.Item], r)
-		}
-	}
 	for res, recipes := range byResult {
 		if len(recipes) != 1 {
 			log.Printf("WARNING: Multiple recipes produce %q: %v", res, recipes)
@@ -86,8 +84,13 @@ func (s *Solver) step(res string, rate float64, depth int) {
 	}
 	r := rs[0]
 
+	var marker string
+	if depth > 0 {
+		marker = fmt.Sprintf("%*s", (depth-1)*2, "\\_")
+	}
+
 	buildings := rate / outPerMin(r, res)
-	fmt.Printf("%*s%6.2f x %s %v (%.f %s/min)\n", depth*2, "", buildings, r.Name, r.Type, rate, res)
+	fmt.Printf("%*s*%6.2f x %s %v (%.f %s/min)\n", depth*2, marker, buildings, r.Name, r.Type, rate, res)
 	for _, i := range r.Result {
 		s.resPerMin[i.Item] += buildings * outPerMin(r, i.Item)
 	}

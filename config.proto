@@ -12,6 +12,7 @@ enum ProductionType {
   CHEMICAL = 5;
   BURNED = 6; // Fuel -> power
   RESEARCHED = 7;
+  COLLIDED = 8;
 }
 
 message Recipe {

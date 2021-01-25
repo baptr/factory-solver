@@ -1,5 +1,5 @@
+# Purple science
 recipe: <
-  name: "Information matrix"
   result: <item: "Information matrix" quantity: 1>
   input: <item: "Processor" quantity: 2>
   input: <item: "Particle broadband" quantity: 1>
@@ -7,7 +7,6 @@ recipe: <
   type: RESEARCHED
 >
 recipe: <
-  name: "Particle broadband"
   result: <item: "Particle broadband" quantity: 1>
   input: <item: "Carbon nanotube" quantity: 2>
   input: <item: "Crystal silicon" quantity: 2>
@@ -16,7 +15,6 @@ recipe: <
   type: ASSEMBLED
 >
 recipe: <
-  name: "Carbon nanotube"
   result: <item: "Carbon nanotube" quantity: 2>
   input: <item: "Graphene" quantity: 3>
   input: <item: "Titanium ingot" quantity: 1>
@@ -106,6 +104,12 @@ recipe: <
   type: HARVESTED
 >
 recipe: <
+  name: "Stone vein"
+  result: <item: "Stone ore" quantity: 1>
+  per_minute: 36 # TODO: Use bonus instead of hardcoding
+  type: HARVESTED
+>
+recipe: <
   result: <item: "Copper ingot" quantity: 1>
   input: <item: "Copper ore" quantity: 1>
   duration: <seconds: 1>
@@ -117,6 +121,104 @@ recipe: <
   duration: <seconds: 1>
   type: SMELTED
 >
+
+# Warp travel
+recipe: <
+  result: <item: "Space warper" quantity: 1>
+  input: <item: "Graviton lens" quantity: 1>
+  duration: <seconds: 10>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Graviton lens" quantity: 1>
+  input: <item: "Diamond" quantity: 4>
+  input: <item: "Strange matter" quantity: 1>
+  duration: <seconds: 6>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Diamond" quantity: 1>
+  input: <item: "Energetic graphite" quantity: 1>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Strange matter" quantity: 1>
+  input: <item: "Particle container" quantity: 2>
+  input: <item: "Iron ingot" quantity: 2>
+  input: <item: "Deuterium" quantity: 10>
+  duration: <seconds: 8>
+  type: COLLIDED
+>
+recipe: <
+  # TODO name
+  result: <item: "Deuterium" quantity: 5>
+  input: <item: "Hydrogen" quantity: 10>
+  duration: <seconds: 5>
+  type: COLLIDED
+>
+recipe: <
+  result: <item: "Particle container" quantity: 1>
+  input: <item: "Electromagnetic turbine" quantity: 2>
+  input: <item: "Copper ingot" quantity: 2>
+  input: <item: "Graphene" quantity: 2>
+  duration: <seconds: 4>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Electromagnetic turbine" quantity: 1>
+  input: <item: "Electric motor" quantity: 2>
+  input: <item: "Magnetic coil" quantity: 2>
+  duration: <seconds: 2>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Electric motor" quantity: 1>
+  input: <item: "Iron ingot" quantity: 2>
+  input: <item: "Gear" quantity: 1>
+  input: <item: "Magnetic coil" quantity: 1>
+  duration: <seconds: 2>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Magnetic coil" quantity: 2>
+  input: <item: "Magnet" quantity: 2>
+  input: <item: "Copper ingot" quantity: 1>
+  duration: <seconds: 1>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Gear" quantity: 1>
+  input: <item: "Iron ingot" quantity: 1>
+  duration: <seconds: 1>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Magnet" quantity: 1>
+  input: <item: "Iron ore" quantity: 1>
+  duration: <seconds: 1 millis: 500>
+  type: SMELTED
+>
+
+# Alternates
+recipe: <
+  name: "Fire Ice graphene"
+  result: <item: "Graphene" quantity: 2>
+  result: <item: "Hydrogen" quantity: 1>
+  input: <item: "Fire ice" quantity: 2>
+  duration: <seconds: 2>
+  type: CHEMICAL
+>
+recipe: <
+  name: "X-ray cracking"
+  result: <item: "Hydrogen" quantity: 3>
+  result: <item: "Energetic graphite" quantity: 1>
+  input: <item: "Refined oil" quantity: 1>
+  input: <item: "Hydrogen" quantity: 2>
+  duration: <seconds: 4>
+  type: REFINED
+>
+
 
 bonus: <
   type: HARVESTED
