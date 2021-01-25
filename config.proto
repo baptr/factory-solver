@@ -1,0 +1,47 @@
+syntax = "proto3";
+package factorysolver;
+
+option go_package = "github.com/baptr/factory-solver/configpb";
+
+enum ProductionType {
+  ProductionType_UNKNOWN = 0;
+  HARVESTED = 1;
+  SMELTED = 2;
+  ASSEMBLED = 3;
+  REFINED = 4;
+  CHEMICAL = 5;
+  BURNED = 6; // Fuel -> power
+  RESEARCHED = 7;
+}
+
+message Recipe {
+  string name = 1; // optional, inferred from result by default
+  repeated ItemQuantity result = 2;
+  repeated ItemQuantity input = 3;
+  oneof timing {
+    Duration duration = 4;
+    double per_minute = 5;
+    double per_second = 6;
+  }
+  ProductionType type = 7;
+}
+
+message ItemQuantity {
+  string item = 1;
+  int32 quantity = 2;
+}
+
+message Bonus {
+  repeated ProductionType type = 1;
+  double multiplier = 2;
+}
+
+message Config {
+  repeated Recipe recipe = 1;
+  repeated Bonus bonus = 2;
+}
+
+message Duration {
+  int32 seconds = 1;
+  int32 millis = 2;
+}

@@ -1,0 +1,124 @@
+recipe: <
+  name: "Information matrix"
+  result: <item: "Information matrix" quantity: 1>
+  input: <item: "Processor" quantity: 2>
+  input: <item: "Particle broadband" quantity: 1>
+  duration: <seconds: 10>
+  type: RESEARCHED
+>
+recipe: <
+  name: "Particle broadband"
+  result: <item: "Particle broadband" quantity: 1>
+  input: <item: "Carbon nanotube" quantity: 2>
+  input: <item: "Crystal silicon" quantity: 2>
+  input: <item: "Plastic" quantity: 1>
+  duration: <seconds: 8>
+  type: ASSEMBLED
+>
+recipe: <
+  name: "Carbon nanotube"
+  result: <item: "Carbon nanotube" quantity: 2>
+  input: <item: "Graphene" quantity: 3>
+  input: <item: "Titanium ingot" quantity: 1>
+  duration: <seconds: 4>
+  type: CHEMICAL
+>
+recipe: <
+  result: <item: "Graphene" quantity: 2>
+  input: <item: "Energetic graphite" quantity: 3>
+  input: <item: "Sulfuric acid" quantity: 1>
+  duration: <seconds: 3>
+  type: CHEMICAL
+>
+recipe: <
+  result: <item: "Sulfuric acid" quantity: 4>
+  input: <item: "Refined oil" quantity: 6>
+  input: <item: "Stone ore" quantity: 8>
+  input: <item: "Water" quantity: 6>
+  duration: <seconds: 6>
+  type: CHEMICAL
+>
+recipe: <
+  name: "Plasma refining"
+  result: <item: "Refined oil" quantity: 2>
+  result: <item: "Hydrogen" quantity: 1>
+  input: <item: "Crude oil" quantity: 2>
+  duration: <seconds: 4>
+  type: REFINED
+>
+recipe: <
+  result: <item: "Energetic graphite" quantity: 1>
+  input: <item: "Coal ore" quantity: 2>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Processor" quantity: 1>
+  input: <item: "Circuit board" quantity: 2>
+  input: <item: "Microcrystalline component" quantity: 2>
+  duration: <seconds: 3>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Circuit board" quantity: 2>
+  input: <item: "Iron ingot" quantity: 2>
+  input: <item: "Copper ingot" quantity: 1>
+  duration: <seconds: 1>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Microcrystalline component" quantity: 1>
+  input: <item: "High-purity silicon" quantity: 2>
+  input: <item: "Copper ingot" quantity: 1>
+  duration: <seconds: 2>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Crystal silicon" quantity: 1>
+  input: <item: "High-purity silicon" quantity: 1>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Plastic" quantity: 1>
+  input: <item: "Refined oil" quantity: 2>
+  input: <item: "Energetic graphite" quantity: 1>
+  duration: <seconds: 3>
+  type: CHEMICAL
+>
+recipe: <
+  name: "Thermal hydrogen"
+  input: <item: "Hydrogen" quantity: 1>
+  result: <item: "Energy (mJ)" quantity: 8> # TODO: 80% efficiency
+  duration: <seconds: 3 millis: 700>
+  type: BURNED
+>
+recipe: <
+  name: "Water pump"
+  result: <item: "Water" quantity: 1>
+  per_minute: 60
+  type: HARVESTED
+>
+recipe: <
+  name: "Coal vein"
+  result: <item: "Coal ore" quantity: 1>
+  per_minute: 36 # TODO: Use bonus instead of hardcoding
+  type: HARVESTED
+>
+recipe: <
+  result: <item: "Copper ingot" quantity: 1>
+  input: <item: "Copper ore" quantity: 1>
+  duration: <seconds: 1>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Iron ingot" quantity: 1>
+  input: <item: "Iron ore" quantity: 1>
+  duration: <seconds: 1>
+  type: SMELTED
+>
+
+bonus: <
+  type: HARVESTED
+  multiplier: 1.2
+>
