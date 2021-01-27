@@ -92,6 +92,13 @@ func (s *Solver) step(res string, rate float64, depth int) {
 	buildings := rate / outPerMin(r, res)
 	fmt.Printf("%*s*%6.2f x %s %v (%.f %s/min)\n", depth*2, marker, buildings, r.Name, r.Type, rate, res)
 	for _, i := range r.Result {
+		switch r.Type {
+		case configpb.ProductionType_VEIN_HARVESTED,
+			configpb.ProductionType_LIQUID_HARVESTED,
+			configpb.ProductionType_OIL_HARVESTED:
+			// Leave harvests in the negative so they show up as I/O
+			continue
+		}
 		s.resPerMin[i.Item] += buildings * outPerMin(r, i.Item)
 	}
 	for _, i := range r.Input {
@@ -184,7 +191,7 @@ func main() {
 		resNames = append(resNames, r)
 	}
 	sort.Slice(resNames, func(i, j int) bool {
-		return s.resPerMin[resNames[i]] < s.resPerMin[resNames[j]]
+		return s.resPerMin[resNames[i]] > s.resPerMin[resNames[j]]
 	})
 	for _, r := range resNames {
 		fmt.Printf("%7.2f x %s\n", s.resPerMin[r], r)

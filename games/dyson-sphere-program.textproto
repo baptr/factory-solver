@@ -1,3 +1,178 @@
+# Raw resources
+recipe: <
+  name: "Coal vein"
+  result: <item: "Coal ore" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Stone vein"
+  result: <item: "Stone ore" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Iron vein"
+  result: <item: "Iron ore" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Copper vein"
+  result: <item: "Copper ore" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Silicon vein"
+  result: <item: "Silicon ore" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Titanium vein"
+  result: <item: "Titanium ore" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Water pump"
+  result: <item: "Water" quantity: 1>
+  per_minute: 50
+  type: LIQUID_HARVESTED
+>
+recipe: <
+  name: "Crude oil seep"
+  result: <item: "Crude oil" quantity: 1>
+  per_second: 1
+  type: OIL_HARVESTED
+>
+
+# Rare veins
+# TODO: Better way to mark these as accessible
+recipe: <
+  name: "Organic crystal vein"
+  result: <item: "Organic crystal" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Fire ice vein"
+  result: <item: "Fire ice" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+
+# Smelting
+recipe: <
+  result: <item: "Iron ingot" quantity: 1>
+  input: <item: "Iron ore" quantity: 1>
+  duration: <seconds: 1>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Copper ingot" quantity: 1>
+  input: <item: "Copper ore" quantity: 1>
+  duration: <seconds: 1>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "High-purity silicon" quantity: 1>
+  input: <item: "Silicon ore" quantity: 2>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Crystal silicon" quantity: 1>
+  input: <item: "High-purity silicon" quantity: 1>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Titanium ingot" quantity: 1>
+  input: <item: "Titanium ore" quantity: 2>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Energetic graphite" quantity: 1>
+  input: <item: "Coal ore" quantity: 2>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Diamond" quantity: 1>
+  input: <item: "Energetic graphite" quantity: 1>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Magnet" quantity: 1>
+  input: <item: "Iron ore" quantity: 1>
+  duration: <seconds: 1 millis: 500>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Glass" quantity: 1>
+  input: <item: "Stone ore" quantity: 2>
+  duration: <seconds: 2>
+  type: SMELTED
+>
+
+# Green science
+recipe: <
+  result: <item: "Gravity matrix" quantity: 2>
+  input: <item: "Graviton lens" quantity: 1>
+  input: <item: "Quantum chip" quantity: 1>
+  duration: <seconds: 24>
+  type: RESEARCHED
+>
+recipe: <
+  result: <item: "Quantum chip" quantity: 1>
+  input: <item: "Processor" quantity: 2>
+  input: <item: "Plane filter" quantity: 2>
+  duration: <seconds: 6>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Plane filter" quantity: 1>
+  input: <item: "Casimir crystal" quantity: 1>
+  input: <item: "Titanium glass" quantity: 2>
+  duration: <seconds: 12>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Casimir crystal" quantity: 1>
+  input: <item: "Titanium crystal" quantity: 1>
+  input: <item: "Graphene" quantity: 2>
+  input: <item: "Hydrogen" quantity: 12>
+  duration: <seconds: 4>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Titanium crystal" quantity: 1>
+  input: <item: "Organic crystal" quantity: 1>
+  input: <item: "Titanium ingot" quantity: 3>
+  duration: <seconds: 4>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Organic crystal" quantity: 1>
+  input: <item: "Plastic" quantity: 2>
+  input: <item: "Refined oil" quantity: 1>
+  input: <item: "Water" quantity: 1>
+  duration: <seconds: 6>
+  type: CHEMICAL
+>
+recipe: <
+  result: <item: "Titanium glass" quantity: 2>
+  input: <item: "Glass" quantity: 2>
+  input: <item: "Titanium ingot" quantity: 2>
+  input: <item: "Water" quantity: 2>
+  duration: <seconds: 5>
+  type: ASSEMBLED
+>
+
 # Purple science
 recipe: <
   result: <item: "Information matrix" quantity: 1>
@@ -45,12 +220,6 @@ recipe: <
   type: REFINED
 >
 recipe: <
-  result: <item: "Energetic graphite" quantity: 1>
-  input: <item: "Coal ore" quantity: 2>
-  duration: <seconds: 2>
-  type: SMELTED
->
-recipe: <
   result: <item: "Processor" quantity: 1>
   input: <item: "Circuit board" quantity: 2>
   input: <item: "Microcrystalline component" quantity: 2>
@@ -72,54 +241,11 @@ recipe: <
   type: ASSEMBLED
 >
 recipe: <
-  result: <item: "Crystal silicon" quantity: 1>
-  input: <item: "High-purity silicon" quantity: 1>
-  duration: <seconds: 2>
-  type: SMELTED
->
-recipe: <
   result: <item: "Plastic" quantity: 1>
   input: <item: "Refined oil" quantity: 2>
   input: <item: "Energetic graphite" quantity: 1>
   duration: <seconds: 3>
   type: CHEMICAL
->
-recipe: <
-  name: "Thermal hydrogen"
-  input: <item: "Hydrogen" quantity: 1>
-  result: <item: "Energy (mJ)" quantity: 8> # TODO: 80% efficiency
-  duration: <seconds: 3 millis: 700>
-  type: BURNED
->
-recipe: <
-  name: "Water pump"
-  result: <item: "Water" quantity: 1>
-  per_minute: 60
-  type: HARVESTED
->
-recipe: <
-  name: "Coal vein"
-  result: <item: "Coal ore" quantity: 1>
-  per_minute: 36 # TODO: Use bonus instead of hardcoding
-  type: HARVESTED
->
-recipe: <
-  name: "Stone vein"
-  result: <item: "Stone ore" quantity: 1>
-  per_minute: 36 # TODO: Use bonus instead of hardcoding
-  type: HARVESTED
->
-recipe: <
-  result: <item: "Copper ingot" quantity: 1>
-  input: <item: "Copper ore" quantity: 1>
-  duration: <seconds: 1>
-  type: SMELTED
->
-recipe: <
-  result: <item: "Iron ingot" quantity: 1>
-  input: <item: "Iron ore" quantity: 1>
-  duration: <seconds: 1>
-  type: SMELTED
 >
 
 # Warp travel
@@ -135,12 +261,6 @@ recipe: <
   input: <item: "Strange matter" quantity: 1>
   duration: <seconds: 6>
   type: ASSEMBLED
->
-recipe: <
-  result: <item: "Diamond" quantity: 1>
-  input: <item: "Energetic graphite" quantity: 1>
-  duration: <seconds: 2>
-  type: SMELTED
 >
 recipe: <
   result: <item: "Strange matter" quantity: 1>
@@ -193,12 +313,6 @@ recipe: <
   duration: <seconds: 1>
   type: ASSEMBLED
 >
-recipe: <
-  result: <item: "Magnet" quantity: 1>
-  input: <item: "Iron ore" quantity: 1>
-  duration: <seconds: 1 millis: 500>
-  type: SMELTED
->
 
 # Alternates
 recipe: <
@@ -219,8 +333,116 @@ recipe: <
   type: REFINED
 >
 
+# Fuels
+fuel: <
+  item: "Coal ore"
+  joules: 2700000
+  type: BURNED
+>
+fuel: <
+  item: "Energetic graphite"
+  joules: 6300000
+  type: BURNED
+>
+fuel: <
+  item: "Hydrogen"
+  joules: 8000000
+  type: BURNED
+>
+fuel: <
+  item: "Refined oil"
+  joules: 4400000
+  type: BURNED
+>
+fuel: <
+  item: "Hydrogen fuel rod"
+  joules: 40000000
+  type: BURNED
+>
+fuel: <
+  item: "Organic crystal"
+  joules: 1800000
+  type: BURNED
+>
 
-bonus: <
-  type: HARVESTED
-  multiplier: 1.2
+# Buildings
+building: <
+  name: "Mining machine"
+  efficiency: 1
+  active_watts_used: 420000
+  idle_watts_used: 24000
+  type: VEIN_HARVESTED
+>
+building: <
+  name: "Oil extractor"
+  efficiency: 1
+  active_watts_used: 840000
+  idle_watts_used: 24000
+  type: OIL_HARVESTED
+>
+building: <
+  name: "Water pump"
+  efficiency: 1
+  active_watts_used: 300000
+  idle_watts_used: 12000
+  type: LIQUID_HARVESTED
+>
+building: <
+  name: "Smelter"
+  efficiency: 1
+  active_watts_used: 360000
+  idle_watts_used: 12000
+  type: SMELTED
+>
+building: <
+  name: "Assembling machine Mk.I"
+  efficiency: 0.75
+  active_watts_used: 270000
+  idle_watts_used: 12000
+  type: ASSEMBLED
+>
+building: <
+  name: "Assembling machine Mk.II"
+  efficiency: 1
+  active_watts_used: 480000
+  idle_watts_used: 15000
+  type: ASSEMBLED
+>
+building: <
+  name: "Assembling machine Mk.III"
+  efficiency: 1.5
+  active_watts_used: 780000
+  idle_watts_used: 18000
+  type: ASSEMBLED
+>
+building: <
+  name: "Oil refinery"
+  efficiency: 1
+  active_watts_used: 960000
+  idle_watts_used: 24000
+  type: CHEMICAL
+>
+building: <
+  name: "Chemical plant"
+  efficiency: 1
+  active_watts_used: 720000
+  idle_watts_used: 24000
+  type: CHEMICAL
+>
+
+# Power generation
+building: <
+  name: "Thermal power station"
+  active_watts_used: -2160000
+  efficiency: 0.8
+  type: BURNED
+>
+
+# Upgrades/Modifiers
+# TODO: these shouldn't be static/in this config
+efficiency: <
+  type: VEIN_HARVESTED
+  type: LIQUID_HARVESTED
+  type: OIL_HARVESTED
+  multiplier: 1.4
 >

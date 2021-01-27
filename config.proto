@@ -5,14 +5,17 @@ option go_package = "github.com/baptr/factory-solver/configpb";
 
 enum ProductionType {
   ProductionType_UNKNOWN = 0;
-  HARVESTED = 1;
-  SMELTED = 2;
-  ASSEMBLED = 3;
-  REFINED = 4;
-  CHEMICAL = 5;
-  BURNED = 6; // Fuel -> power
-  RESEARCHED = 7;
-  COLLIDED = 8;
+  VEIN_HARVESTED = 1;
+  LIQUID_HARVESTED = 2;
+  OIL_HARVESTED = 3;
+  SMELTED = 4;
+  ASSEMBLED = 5;
+  REFINED = 6;
+  CHEMICAL = 7;
+  RESEARCHED = 8;
+  COLLIDED = 9;
+  BURNED = 10; // Chemical fuel -> power
+  NUCLEAR = 11; // Nuclear fuel -> power
 }
 
 message Recipe {
@@ -32,6 +35,20 @@ message ItemQuantity {
   int32 quantity = 2;
 }
 
+message Fuel {
+  string item = 1;
+  int64 joules = 2;
+  ProductionType type = 5; // BURNED vs NUCLEAR
+}
+
+message Building {
+  string name = 1;
+  int64 active_watts_used = 2; // negative for generators
+  int64 idle_watts_used = 3;
+  double efficiency = 4;
+  ProductionType type = 5;
+}
+
 message Bonus {
   repeated ProductionType type = 1;
   double multiplier = 2;
@@ -39,7 +56,9 @@ message Bonus {
 
 message Config {
   repeated Recipe recipe = 1;
-  repeated Bonus bonus = 2;
+  repeated Fuel fuel = 2;
+  repeated Building building = 3;
+  repeated Bonus efficiency = 4;
 }
 
 message Duration {
