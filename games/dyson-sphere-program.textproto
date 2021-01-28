@@ -1,3 +1,12 @@
+recipe: <
+  name: "X-ray cracking"
+  result: <item: "Hydrogen" quantity: 3>
+  result: <item: "Energetic graphite" quantity: 1>
+  input: <item: "Refined oil" quantity: 1>
+  input: <item: "Hydrogen" quantity: 2>
+  duration: <seconds: 4>
+  type: REFINED
+>
 # Raw resources
 recipe: <
   name: "Coal vein"
@@ -323,15 +332,6 @@ recipe: <
   duration: <seconds: 2>
   type: CHEMICAL
 >
-recipe: <
-  name: "X-ray cracking"
-  result: <item: "Hydrogen" quantity: 3>
-  result: <item: "Energetic graphite" quantity: 1>
-  input: <item: "Refined oil" quantity: 1>
-  input: <item: "Hydrogen" quantity: 2>
-  duration: <seconds: 4>
-  type: REFINED
->
 
 # Fuels
 fuel: <
@@ -347,6 +347,11 @@ fuel: <
 fuel: <
   item: "Hydrogen"
   joules: 8000000
+  type: BURNED
+>
+fuel: <
+  item: "Crude oili"
+  joules: 4000000
   type: BURNED
 >
 fuel: <
@@ -420,7 +425,7 @@ building: <
   efficiency: 1
   active_watts_used: 960000
   idle_watts_used: 24000
-  type: CHEMICAL
+  type: REFINED
 >
 building: <
   name: "Chemical plant"
@@ -428,6 +433,22 @@ building: <
   active_watts_used: 720000
   idle_watts_used: 24000
   type: CHEMICAL
+>
+building: <
+  name: "Matrix lab"
+  efficiency: 1
+  active_watts_used: 480000
+  idle_watts_used: 12000
+  # TODO: Differentiate matrix production from research, since they have
+  # different bonuses/rates
+  type: RESEARCHED
+>
+building: <
+  name: "Miniature particle collider"
+  efficiency: 1
+  active_watts_used: 12000000
+  idle_watts_used: 120000
+  type: COLLIDED
 >
 
 # Power generation

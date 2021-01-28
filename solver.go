@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"path"
 	"sort"
@@ -14,9 +15,14 @@ import (
 )
 
 type Solver struct {
-	byResult map[string][]*configpb.Recipe
+	byResult  map[string][]*configpb.Recipe
+	buildings map[configpb.ProductionType][]*configpb.Building
+	bonuses   map[configpb.ProductionType]float64
+	fuels     map[string]*configpb.Fuel
 
-	resPerMin map[string]float64
+	prodPerMin map[string]float64
+	resPerMin  map[string]float64
+	powerW     float64
 }
 
 func newSolver(cfg *configpb.Config) (*Solver, error) {
@@ -70,17 +76,51 @@ func newSolver(cfg *configpb.Config) (*Solver, error) {
 		log.Printf("Unsourced component %q in recipes: %q", i, names)
 	}
 
-	return &Solver{
-		byResult: byResult,
+	bonuses := make(map[configpb.ProductionType]float64)
+	for _, b := range cfg.Efficiency {
+		for _, t := range b.Type {
+			if bonuses[t] != 0 {
+				log.Printf("WARNING: Overwriting existing %q bonus %f with %f", t, bonuses[t], b.Multiplier)
+			}
+			bonuses[t] = b.Multiplier
+		}
+	}
 
-		resPerMin: make(map[string]float64),
+	buildings := make(map[configpb.ProductionType][]*configpb.Building)
+	for _, b := range cfg.Building {
+		buildings[b.Type] = append(buildings[b.Type], b)
+	}
+	log.Printf("Loaded %d buildings", len(buildings))
+
+	fuels := make(map[string]*configpb.Fuel)
+	for _, f := range cfg.Fuel {
+		if old := fuels[f.Item]; old != nil {
+			log.Printf("WARNING: Duplicate fuel definition for %q:\nOLD: %v\nNEW:  %v", f.Item, old, f)
+		}
+		fuels[f.Item] = f
+	}
+
+	return &Solver{
+		byResult:  byResult,
+		buildings: buildings,
+		bonuses:   bonuses,
+		fuels:     fuels,
+
+		resPerMin:  make(map[string]float64),
+		prodPerMin: make(map[string]float64),
 	}, nil
 }
 
-func (s *Solver) step(res string, rate float64, depth int) {
+func (s *Solver) step(res string, rate float64, depth int) error {
+	s.resPerMin[res] -= rate
+	if s.resPerMin[res] > -0.01 {
+		// Already enough present.
+		return nil
+	}
+
 	rs := s.byResult[res]
 	if len(rs) == 0 {
-		return
+		return fmt.Errorf("no recipe produces %q", res)
 	}
 	r := rs[0]
 
@@ -89,30 +129,83 @@ func (s *Solver) step(res string, rate float64, depth int) {
 		marker = fmt.Sprintf("%*s", (depth-1)*2, "\\_")
 	}
 
-	buildings := rate / outPerMin(r, res)
-	fmt.Printf("%*s*%6.2f x %s %v (%.f %s/min)\n", depth*2, marker, buildings, r.Name, r.Type, rate, res)
-	for _, i := range r.Result {
-		switch r.Type {
-		case configpb.ProductionType_VEIN_HARVESTED,
-			configpb.ProductionType_LIQUID_HARVESTED,
-			configpb.ProductionType_OIL_HARVESTED:
-			// Leave harvests in the negative so they show up as I/O
-			continue
+	util := rate / s.outPerMin(r, res)
+	s.prodPerMin[r.Name] += util
+	b, err := s.buildingFor(r)
+	if err != nil {
+		log.Printf("WARNING: Power calculation will be inaccurate: %v", err)
+	} else {
+		buildings := util / b.Efficiency
+		power := float64(b.ActiveWattsUsed)*buildings + float64(b.IdleWattsUsed)*(math.Ceil(buildings)-buildings)
+		s.powerW -= power
+	}
+	fmt.Printf("%*s*%6.2f x %s %v (%.f %s/min)\n", depth*2, marker, util, r.Name, r.Type, rate, res)
+
+	switch r.Type {
+	case configpb.ProductionType_VEIN_HARVESTED,
+		configpb.ProductionType_LIQUID_HARVESTED,
+		configpb.ProductionType_OIL_HARVESTED:
+		// Leave harvest in the negative so they show up as I/O
+	default:
+		for _, i := range r.Result {
+			s.resPerMin[i.Item] += util * s.outPerMin(r, i.Item)
 		}
-		s.resPerMin[i.Item] += buildings * outPerMin(r, i.Item)
 	}
 	for _, i := range r.Input {
-		need := buildings * inPerMin(r, i.Item)
-		s.resPerMin[i.Item] -= need
-		s.step(i.Item, need, depth+1)
+		need := util * inPerMin(r, i.Item)
+		if err := s.step(i.Item, need, depth+1); err != nil {
+			return fmt.Errorf("producing %s: %v", res, err)
+		}
 	}
-	return
+	return nil
 }
 
-func outPerMin(r *configpb.Recipe, res string) float64 {
+func (s *Solver) burn(f *configpb.Fuel, perMin float64) {
+	bOpts := s.buildings[f.Type]
+	if len(bOpts) == 0 {
+		log.Printf("WARNING: No buildings defined to burn %v fuel (%q)", f.Type, f.Item)
+		return
+	}
+	b := bOpts[0]
+	if len(bOpts) > 1 {
+		log.Printf("WARNING: Defaulting to first candidate burner %s of %v", b.Name, bOpts)
+	}
+	totalWatts := float64(f.Joules) * perMin / 60
+	util := totalWatts / float64(-b.ActiveWattsUsed)
+	fmt.Printf("Burn(%s x %.2f) = %sW = %.2f x %s\n", f.Item, perMin, si(totalWatts), util, b.Name)
+}
+
+func si(f float64) string {
+	if math.Abs(f) >= 1e9 {
+		return fmt.Sprintf("%.1fG", f/1e9)
+	}
+	if math.Abs(f) >= 1e6 {
+		return fmt.Sprintf("%.1fM", f/1e6)
+	}
+	if math.Abs(f) >= 1e3 {
+		return fmt.Sprintf("%.1fk", f/1e3)
+	}
+	return fmt.Sprintf("%.f", f)
+}
+
+func (s *Solver) buildingFor(r *configpb.Recipe) (*configpb.Building, error) {
+	opts := s.buildings[r.Type]
+	if len(opts) == 0 {
+		return nil, fmt.Errorf("no building defined for type %v needed by recipe %q", r.Type, r.Name)
+	}
+	// TODO: Bin pack the desired rate?
+	// TODO: Add options for space/power optimization?
+	return opts[0], nil
+}
+
+func (s *Solver) outPerMin(r *configpb.Recipe, res string) float64 {
+	bonus := s.bonuses[r.Type]
+	if bonus == 0 {
+		bonus = 1
+	}
 	for _, i := range r.Result {
 		if i.Item == res {
-			return perMin(r) * float64(i.Quantity)
+			return perMin(r) * float64(i.Quantity) * bonus
 		}
 	}
 	log.Fatalf("outPerMin: unable to find result %q in recipe %v", res, r)
@@ -179,21 +272,51 @@ func main() {
 	}
 
 	fmt.Printf("Solution:\n")
-	s.step(target, rate, 0)
+	if err := s.step(target, rate, 0); err != nil {
+		log.Fatalf("Failed to find a solution: %v", err)
+	}
+	s.resPerMin[target] += rate
+	fmt.Println()
+
+	fmt.Printf("Total production:\n")
+	var prodNames []string
+	for r := range s.prodPerMin {
+		prodNames = append(prodNames, r)
+	}
+	// TODO: Topological sort would feel better.
+	sort.Slice(prodNames, func(i, j int) bool {
+		return s.prodPerMin[prodNames[i]] > s.prodPerMin[prodNames[j]]
+	})
+	for _, r := range prodNames {
+		fmt.Printf("%7.2f x %s\n", s.prodPerMin[r], r)
+	}
 	fmt.Println()
 
 	fmt.Printf("Final resources/min:\n")
 	var resNames []string
-	for r, c := range s.resPerMin {
-		if c == 0 {
-			continue
-		}
+	for r := range s.resPerMin {
 		resNames = append(resNames, r)
 	}
 	sort.Slice(resNames, func(i, j int) bool {
 		return s.resPerMin[resNames[i]] > s.resPerMin[resNames[j]]
 	})
 	for _, r := range resNames {
-		fmt.Printf("%7.2f x %s\n", s.resPerMin[r], r)
+		c := s.resPerMin[r]
+		if c == 0 {
+			continue
+		}
+		fmt.Printf("%7.2f x %s\n", c, r)
+	}
+
+	fmt.Printf("\nRequired Power: %sW\n", si(s.powerW))
+	for r, v := range s.resPerMin {
+		if v > 0 {
+			f := s.fuels[r]
+			if f == nil {
+				continue // not a fuel
+			}
+			// Propose burning the excess
+			s.burn(f, v)
+		}
 	}
 }
