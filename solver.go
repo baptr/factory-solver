@@ -113,9 +113,12 @@ func newSolver(cfg *configpb.Config) (*Solver, error) {
 
 func (s *Solver) step(res string, rate float64, depth int) error {
 	s.resPerMin[res] -= rate
-	if s.resPerMin[res] > -0.01 {
+	if s.resPerMin[res] > -0.001 {
 		// Already enough present.
 		return nil
+	}
+	if rem := -s.resPerMin[res]; rem < rate {
+		rate = rem
 	}
 
 	rs := s.byResult[res]
@@ -123,11 +126,6 @@ func (s *Solver) step(res string, rate float64, depth int) error {
 		return fmt.Errorf("no recipe produces %q", res)
 	}
 	r := rs[0]
-
-	var marker string
-	if depth > 0 {
-		marker = fmt.Sprintf("%*s", (depth-1)*2, "\\_")
-	}
 
 	util := rate / s.outPerMin(r, res)
 	s.prodPerMin[r.Name] += util
@@ -138,6 +136,11 @@ func (s *Solver) step(res string, rate float64, depth int) error {
 		buildings := util / b.Efficiency
 		power := float64(b.ActiveWattsUsed)*buildings + float64(b.IdleWattsUsed)*(math.Ceil(buildings)-buildings)
 		s.powerW -= power
+	}
+
+	var marker string
+	if depth > 0 {
+		marker = fmt.Sprintf("%*s", (depth-1)*2, "\\_")
 	}
 	fmt.Printf("%*s*%6.2f x %s %v (%.f %s/min)\n", depth*2, marker, util, r.Name, r.Type, rate, res)
 
@@ -172,7 +175,7 @@ func (s *Solver) burn(f *configpb.Fuel, perMin float64) {
 	}
 	totalWatts := float64(f.Joules) * perMin / 60
 	util := totalWatts / float64(-b.ActiveWattsUsed)
-	fmt.Printf("Burn(%s x %.2f) = %sW = %.2f x %s\n", f.Item, perMin, si(totalWatts), util, b.Name)
+	fmt.Printf("Burn(%s x %.2f) = %sW = %.2f x %s = %sW @ %.f%%\n", f.Item, perMin, si(totalWatts), util, b.Name, si(totalWatts*b.Efficiency), b.Efficiency*100)
 }
 
 func si(f float64) string {
@@ -302,7 +305,7 @@ func main() {
 	})
 	for _, r := range resNames {
 		c := s.resPerMin[r]
-		if c == 0 {
+		if c == 0 || math.Abs(c) < 0.01 {
 			continue
 		}
 		fmt.Printf("%7.2f x %s\n", c, r)

@@ -1,3 +1,12 @@
+# TODO: Better way to mark these as accessible
+recipe: <
+  name: "Fire Ice graphene"
+  result: <item: "Graphene" quantity: 2>
+  result: <item: "Hydrogen" quantity: 1>
+  input: <item: "Fire ice" quantity: 2>
+  duration: <seconds: 2>
+  type: CHEMICAL
+>
 recipe: <
   name: "X-ray cracking"
   result: <item: "Hydrogen" quantity: 3>
@@ -7,6 +16,21 @@ recipe: <
   duration: <seconds: 4>
   type: REFINED
 >
+
+# Rare veins
+recipe: <
+  name: "Organic crystal vein"
+  result: <item: "Organic crystal" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Fire ice vein"
+  result: <item: "Fire ice" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+
 
 # Raw resources
 recipe: <
@@ -56,21 +80,6 @@ recipe: <
   result: <item: "Crude oil" quantity: 1>
   per_second: 1
   type: OIL_HARVESTED
->
-
-# Rare veins
-# TODO: Better way to mark these as accessible
-recipe: <
-  name: "Organic crystal vein"
-  result: <item: "Organic crystal" quantity: 1>
-  per_minute: 30
-  type: VEIN_HARVESTED
->
-recipe: <
-  name: "Fire ice vein"
-  result: <item: "Fire ice" quantity: 1>
-  per_minute: 30
-  type: VEIN_HARVESTED
 >
 
 # Smelting
@@ -348,14 +357,6 @@ recipe: <
 >
 
 # Alternates
-recipe: <
-  name: "Fire Ice graphene"
-  result: <item: "Graphene" quantity: 2>
-  result: <item: "Hydrogen" quantity: 1>
-  input: <item: "Fire ice" quantity: 2>
-  duration: <seconds: 2>
-  type: CHEMICAL
->
 
 # Fuels
 fuel: <
