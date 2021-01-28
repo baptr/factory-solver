@@ -308,7 +308,7 @@ func main() {
 		fmt.Printf("%7.2f x %s\n", c, r)
 	}
 
-	fmt.Printf("\nRequired Power: %sW\n", si(s.powerW))
+	fmt.Printf("\nBuilding Power: %sW\n", si(s.powerW))
 	for r, v := range s.resPerMin {
 		if v > 0 {
 			f := s.fuels[r]

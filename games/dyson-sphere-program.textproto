@@ -7,6 +7,7 @@ recipe: <
   duration: <seconds: 4>
   type: REFINED
 >
+
 # Raw resources
 recipe: <
   name: "Coal vein"
@@ -255,6 +256,29 @@ recipe: <
   input: <item: "Energetic graphite" quantity: 1>
   duration: <seconds: 3>
   type: CHEMICAL
+>
+
+# Science
+recipe: <
+  result: <item: "Structure matrix" quantity: 1>
+  input: <item: "Diamond" quantity: 1>
+  input: <item: "Titanium crystal" quantity: 1>
+  duration: <seconds: 8>
+  type: RESEARCHED
+>
+recipe: <
+  result: <item: "Energy matrix" quantity: 1>
+  input: <item: "Energetic graphite" quantity: 2>
+  input: <item: "Hydrogen" quantity: 2>
+  duration: <seconds: 6>
+  type: RESEARCHED
+>
+recipe: <
+  result: <item: "Electromagnetic matrix" quantity: 1>
+  input: <item: "Magnetic coil" quantity: 1>
+  input: <item: "Circuit board" quantity: 1>
+  duration: <seconds: 3>
+  type: RESEARCHED
 >
 
 # Warp travel
