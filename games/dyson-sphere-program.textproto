@@ -1,3 +1,4 @@
+# Alternates
 # TODO: Better way to mark these as accessible
 recipe: <
   name: "Fire Ice graphene"
@@ -16,6 +17,13 @@ recipe: <
   duration: <seconds: 4>
   type: REFINED
 >
+recipe: <
+  name: "Spinform nanotube"
+  result: <item: "Carbon nanotube" quantity: 2>
+  input: <item: "Spinform stalagmite crystal" quantity: 2>
+  duration: <seconds: 4>
+  type: CHEMICAL
+>
 
 # Rare veins
 recipe: <
@@ -30,7 +38,18 @@ recipe: <
   per_minute: 30
   type: VEIN_HARVESTED
 >
-
+recipe: <
+  name: "Spinform stalagmite vein?"
+  result: <item: "Spinform stalagmite crystal" quantity: 1>
+  per_minute: 30
+  type: VEIN_HARVESTED
+>
+recipe: <
+  name: "Sulfuric ocean pump"
+  result: <item: "Sulfuric acid" quantity: 1>
+  per_minute: 50
+  type: LIQUID_HARVESTED
+>
 
 # Raw resources
 recipe: <
@@ -135,6 +154,20 @@ recipe: <
   result: <item: "Glass" quantity: 1>
   input: <item: "Stone ore" quantity: 2>
   duration: <seconds: 2>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Steel" quantity: 1>
+  input: <item: "Iron ingot" quantity: 3>
+  duration: <seconds: 3>
+  type: SMELTED
+>
+recipe: <
+  result: <item: "Titanium alloy" quantity: 4>
+  input: <item: "Titanium ingot" quantity: 4>
+  input: <item: "Steel" quantity: 4>
+  input: <item: "Sulfuric acid" quantity: 6>
+  duration: <seconds: 12>
   type: SMELTED
 >
 
@@ -356,7 +389,68 @@ recipe: <
   type: ASSEMBLED
 >
 
-# Alternates
+# Dyson
+recipe: <
+  result: <item: "Small carrier rocket" quantity: 1>
+  input: <item: "Dyson sphere component" quantity: 2>
+  input: <item: "Deuteron fuel rod" quantity: 2>
+  input: <item: "Quantum chip" quantity: 2>
+  duration: <seconds: 6>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Dyson sphere component" quantity: 1>
+  input: <item: "Frame material" quantity: 3>
+  input: <item: "Solar sail" quantity: 3>
+  input: <item: "Processor" quantity: 3>
+  duration: <seconds: 8>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Frame material" quantity: 1>
+  input: <item: "Carbon nanotube" quantity: 4>
+  input: <item: "Titanium alloy" quantity: 1>
+  input: <item: "High-purity silicon" quantity: 1>
+  duration: <seconds: 6>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Solar sail" quantity: 2>
+  input: <item: "Graphene" quantity: 1>
+  input: <item: "Photon combiner" quantity: 1>
+  duration: <seconds: 4>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Deuteron fuel rod" quantity: 1>
+  input: <item: "Titanium alloy" quantity: 1>
+  input: <item: "Deuterium" quantity: 10>
+  input: <item: "Super-magnetic ring" quantity: 1>
+  duration: <seconds: 6>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Super-magnetic ring" quantity: 1>
+  input: <item: "Electromagnetic turbine" quantity: 2>
+  input: <item: "Magnet" quantity: 3>
+  input: <item: "Energetic graphite" quantity: 1>
+  duration: <seconds: 3>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Photon combiner" quantity: 1>
+  input: <item: "Prism" quantity: 2>
+  input: <item: "Circuit board" quantity: 1>
+  duration: <seconds: 3>
+  type: ASSEMBLED
+>
+recipe: <
+  result: <item: "Prism" quantity: 2>
+  input: <item: "Glass" quantity: 3>
+  duration: <seconds: 2>
+  type: ASSEMBLED
+>
+
 
 # Fuels
 fuel: <
