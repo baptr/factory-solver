@@ -113,7 +113,7 @@ func newSolver(cfg *configpb.Config) (*Solver, error) {
 
 func (s *Solver) step(res string, rate float64, depth int) error {
 	s.resPerMin[res] -= rate
-	if s.resPerMin[res] > -0.001 {
+	if s.resPerMin[res] > -0.25 {
 		// Already enough present.
 		return nil
 	}
@@ -144,12 +144,8 @@ func (s *Solver) step(res string, rate float64, depth int) error {
 	}
 	fmt.Printf("%*s*%6.2f x %s %v (%.f %s/min)\n", depth*2, marker, util, r.Name, r.Type, rate, res)
 
-	switch r.Type {
-	case configpb.ProductionType_VEIN_HARVESTED,
-		configpb.ProductionType_LIQUID_HARVESTED,
-		configpb.ProductionType_OIL_HARVESTED:
-		// Leave harvest in the negative so they show up as I/O
-	default:
+	// Leave harvests in the negative so they show up as I/O
+	if !isHarvested(r) {
 		for _, i := range r.Result {
 			s.resPerMin[i.Item] += util * s.outPerMin(r, i.Item)
 		}
@@ -161,6 +157,16 @@ func (s *Solver) step(res string, rate float64, depth int) error {
 		}
 	}
 	return nil
+}
+
+func isHarvested(r *configpb.Recipe) bool {
+	switch r.Type {
+	case configpb.ProductionType_VEIN_HARVESTED,
+		configpb.ProductionType_LIQUID_HARVESTED,
+		configpb.ProductionType_OIL_HARVESTED:
+		return true
+	}
+	return false
 }
 
 func (s *Solver) burn(f *configpb.Fuel, perMin float64) {
@@ -175,7 +181,7 @@ func (s *Solver) burn(f *configpb.Fuel, perMin float64) {
 	}
 	totalWatts := float64(f.Joules) * perMin / 60
 	util := totalWatts / float64(-b.ActiveWattsUsed)
-	fmt.Printf("Burn(%s x %.2f) = %sW = %.2f x %s = %sW @ %.f%%\n", f.Item, perMin, si(totalWatts), util, b.Name, si(totalWatts*b.Efficiency), b.Efficiency*100)
+	fmt.Printf("Burn(%s x %.2f/min) = %sW = %.2f x %s = %sW @ %.f%%\n", f.Item, perMin, si(totalWatts), util, b.Name, si(totalWatts*b.Efficiency), b.Efficiency*100)
 }
 
 func si(f float64) string {
@@ -279,6 +285,11 @@ func main() {
 		log.Fatalf("Failed to find a solution: %v", err)
 	}
 	s.resPerMin[target] += rate
+	if isHarvested(s.byResult[target][0]) {
+		// We normally leave harvests as negative, but if they're expclitly
+		// requested we still want them to show up.
+		s.resPerMin[target] += rate
+	}
 	fmt.Println()
 
 	fmt.Printf("Total production:\n")
