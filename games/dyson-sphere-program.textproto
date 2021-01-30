@@ -1,5 +1,5 @@
 # Alternates
-# TODO: Better way to mark these as accessible
+# TODO: Better way to prioritize/mark these as accessible
 recipe: <
   name: "Fire Ice graphene"
   result: <item: "Graphene" quantity: 2>
@@ -39,7 +39,7 @@ recipe: <
   type: VEIN_HARVESTED
 >
 recipe: <
-  name: "Spinform stalagmite vein?"
+  name: "Spinform stalagmite crystal vein"
   result: <item: "Spinform stalagmite crystal" quantity: 1>
   per_minute: 30
   type: VEIN_HARVESTED
@@ -469,7 +469,7 @@ fuel: <
   type: BURNED
 >
 fuel: <
-  item: "Crude oili"
+  item: "Crude oil"
   joules: 4000000
   type: BURNED
 >
@@ -486,6 +486,16 @@ fuel: <
 fuel: <
   item: "Organic crystal"
   joules: 1800000
+  type: BURNED
+>
+fuel: <
+  item: "Fire ice"
+  joules: 4800000
+  type: BURNED
+>
+fuel: <
+  item: "Graphene"
+  joules: 96000
   type: BURNED
 >
 
@@ -584,5 +594,5 @@ efficiency: <
   type: VEIN_HARVESTED
   type: LIQUID_HARVESTED
   type: OIL_HARVESTED
-  multiplier: 1.4
+  multiplier: 1.5
 >
