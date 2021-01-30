@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -12,6 +13,10 @@ import (
 
 	"github.com/baptr/factory-solver/configpb"
 	"github.com/golang/protobuf/proto"
+)
+
+var (
+	warn = flag.Bool("warn", false, "Whether verbose proto warning should be printed")
 )
 
 type Solver struct {
@@ -53,11 +58,12 @@ func newSolver(cfg *configpb.Config) (*Solver, error) {
 		r.Name = name
 		byName[name] = r
 	}
-	log.Printf("Loaded %d recipes", len(byName))
 
 	for res, recipes := range byResult {
 		if len(recipes) != 1 {
-			log.Printf("WARNING: Multiple recipes produce %q: %v", res, recipes)
+			if *warn {
+				log.Printf("WARNING: Multiple recipes produce %q: %v", res, recipes)
+			}
 		}
 	}
 	unsourced := make(map[string][]*configpb.Recipe)
@@ -90,7 +96,6 @@ func newSolver(cfg *configpb.Config) (*Solver, error) {
 	for _, b := range cfg.Building {
 		buildings[b.Type] = append(buildings[b.Type], b)
 	}
-	log.Printf("Loaded %d buildings", len(buildings))
 
 	fuels := make(map[string]*configpb.Fuel)
 	for _, f := range cfg.Fuel {
@@ -257,10 +262,12 @@ func secs(d *configpb.Duration) float64 {
 // - Produce: as many Information matrix as possible
 //		- Given: 4.2/s crude oil
 func main() {
-	if len(os.Args) != 4 {
+	flag.Parse()
+
+	if len(flag.Args()) != 3 {
 		log.Fatalf("Usage: %s <game textproto> <target resource> <per minute>", path.Base(os.Args[0]))
 	}
-	f, err := ioutil.ReadFile(os.Args[1])
+	f, err := ioutil.ReadFile(flag.Arg(0))
 	if err != nil {
 		log.Fatalf("Failed to open config textproto: %v", err)
 	}
@@ -269,8 +276,8 @@ func main() {
 		log.Fatalf("Failed to unmarshal config proto: %v", err)
 	}
 
-	target := os.Args[2]
-	rate, err := strconv.ParseFloat(os.Args[3], 64)
+	target := flag.Arg(1)
+	rate, err := strconv.ParseFloat(flag.Arg(2), 64)
 	if err != nil {
 		log.Fatalf("Invalid target rate: %v", err)
 	}
