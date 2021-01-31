@@ -8,14 +8,15 @@ enum ProductionType {
   VEIN_HARVESTED = 1;
   LIQUID_HARVESTED = 2;
   OIL_HARVESTED = 3;
-  SMELTED = 4;
-  ASSEMBLED = 5;
-  REFINED = 6;
-  CHEMICAL = 7;
-  RESEARCHED = 8;
-  COLLIDED = 9;
-  BURNED = 10; // Chemical fuel -> power
-  NUCLEAR = 11; // Nuclear fuel -> power
+  ORBIT_HARVESTED = 4;
+  SMELTED = 5;
+  ASSEMBLED = 6;
+  REFINED = 7;
+  CHEMICAL = 8;
+  RESEARCHED = 9;
+  COLLIDED = 10;
+  BURNED = 11; // Chemical fuel -> power
+  NUCLEAR = 12; // Nuclear fuel -> power
 }
 
 message Recipe {

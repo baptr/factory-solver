@@ -1,4 +1,10 @@
 # Alternates
+recipe: <
+  name: "Hydrogen gas giant"
+  result: <item: "Hydrogen" quantity: 1>
+  per_second: 8 # Actually the base efficency of the collector, but hard to represent.
+  type: ORBIT_HARVESTED
+>
 # TODO: Better way to prioritize/mark these as accessible
 recipe: <
   name: "Fire Ice graphene"
@@ -515,6 +521,13 @@ building: <
   type: OIL_HARVESTED
 >
 building: <
+  name: "Orbit collector"
+  efficiency: 1
+  # TODO: Special handling for self-powering?
+  active_watts_used: 30000000
+  type: ORBIT_HARVESTED
+>
+building: <
   name: "Water pump"
   efficiency: 1
   active_watts_used: 300000
@@ -594,5 +607,6 @@ efficiency: <
   type: VEIN_HARVESTED
   type: LIQUID_HARVESTED
   type: OIL_HARVESTED
+  type: ORBIT_HARVESTED
   multiplier: 1.5
 >

@@ -168,7 +168,8 @@ func isHarvested(r *configpb.Recipe) bool {
 	switch r.Type {
 	case configpb.ProductionType_VEIN_HARVESTED,
 		configpb.ProductionType_LIQUID_HARVESTED,
-		configpb.ProductionType_OIL_HARVESTED:
+		configpb.ProductionType_OIL_HARVESTED,
+		configpb.ProductionType_ORBIT_HARVESTED:
 		return true
 	}
 	return false
