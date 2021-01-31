@@ -116,7 +116,7 @@ func newSolver(cfg *configpb.Config) (*Solver, error) {
 	}, nil
 }
 
-func (s *Solver) step(res string, rate float64, depth int) error {
+func (s *Solver) step(res string, rate float64, marker string) error {
 	s.resPerMin[res] -= rate
 	if s.resPerMin[res] > -0.25 {
 		// Already enough present.
@@ -143,11 +143,11 @@ func (s *Solver) step(res string, rate float64, depth int) error {
 		s.powerW -= power
 	}
 
-	var marker string
-	if depth > 0 {
-		marker = fmt.Sprintf("%*s", (depth-1)*2, "\\_")
+	m := marker
+	if len(m) > 0 {
+		m = marker[:len(m)-2] + "\\_"
 	}
-	fmt.Printf("%*s*%6.2f x %s %v (%.f %s/min)\n", depth*2, marker, util, r.Name, r.Type, rate, res)
+	fmt.Printf("%s*%6.2f x %s %v (%.f %s/min)\n", m, util, r.Name, r.Type, rate, res)
 
 	// Leave harvests in the negative so they show up as I/O
 	if !isHarvested(r) {
@@ -155,9 +155,15 @@ func (s *Solver) step(res string, rate float64, depth int) error {
 			s.resPerMin[i.Item] += util * s.outPerMin(r, i.Item)
 		}
 	}
-	for _, i := range r.Input {
+	for idx, i := range r.Input {
 		need := util * inPerMin(r, i.Item)
-		if err := s.step(i.Item, need, depth+1); err != nil {
+		var childMarker string
+		if idx+1 < len(r.Input) {
+			childMarker = marker + "| "
+		} else {
+			childMarker = marker + "  "
+		}
+		if err := s.step(i.Item, need, childMarker); err != nil {
 			return fmt.Errorf("producing %s: %v", res, err)
 		}
 	}
@@ -289,7 +295,7 @@ func main() {
 	}
 
 	fmt.Printf("Solution:\n")
-	if err := s.step(target, rate, 0); err != nil {
+	if err := s.step(target, rate, ""); err != nil {
 		log.Fatalf("Failed to find a solution: %v", err)
 	}
 	s.resPerMin[target] += rate
