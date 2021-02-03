@@ -12,11 +12,13 @@ import (
 	"strconv"
 
 	"github.com/baptr/factory-solver/configpb"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/encoding/prototext"
 )
 
 var (
-	warn = flag.Bool("warn", false, "Whether verbose proto warning should be printed")
+	warn     = flag.Bool("warn", false, "Whether verbose proto warning should be printed")
+	dumpJSON = flag.Bool("dump_json", false, "if true, dump the provided config proto as JSON to stdout and exit")
 )
 
 type Solver struct {
@@ -270,8 +272,11 @@ func secs(d *configpb.Duration) float64 {
 //		- Given: 4.2/s crude oil
 func main() {
 	flag.Parse()
-
-	if len(flag.Args()) != 3 {
+	if *dumpJSON {
+		if len(flag.Args()) != 1 {
+			log.Fatalf("Usage: %s -dump_json <game textproto>", path.Base(os.Args[0]))
+		}
+	} else if len(flag.Args()) != 3 {
 		log.Fatalf("Usage: %s <game textproto> <target resource> <per minute>", path.Base(os.Args[0]))
 	}
 	f, err := ioutil.ReadFile(flag.Arg(0))
@@ -281,6 +286,15 @@ func main() {
 	cfg := &configpb.Config{}
 	if err := prototext.Unmarshal(f, cfg); err != nil {
 		log.Fatalf("Failed to unmarshal config proto: %v", err)
+	}
+
+	if *dumpJSON {
+		b, err := protojson.Marshal(cfg)
+		if err != nil {
+			log.Fatalf("Failed to marshal config proto as json: %v", err)
+		}
+		fmt.Println(string(b))
+		os.Exit(0)
 	}
 
 	target := flag.Arg(1)
